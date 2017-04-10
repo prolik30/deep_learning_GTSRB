@@ -1,0 +1,19 @@
+cd ~/GTSRB
+
+python create_lmdb.py 
+
+/home/user1/caffe-master/build/tools/compute_image_mean -backend=lmdb /home/user1/GTSRB/input/train_lmdb/ /home/user1/GTSRB/input/mean.binaryproto
+
+python /home/user1/caffe-master/python/draw_net.py /home/user1/GTSRB/caffe_models/caffenet_train_val.prototxt /home/user1/GTSRB/caffe_models/caffenet_model.png
+
+/home/user1/caffe-master/build/tools/caffe train --solver /home/user1/GTSRB/caffe_models/caffenet_solver.prototxt 2>&1 | tee /home/user1/GTSRB/caffe_models/caffenet_model_train.log
+
+A small change to caffe parse_log.sh file to resolve issue with plotting learning curves.
+On line 42 change :
+grep ', loss = ' $1 | awk '{print $9}' > aux1.txt
+to
+grep ', loss = ' $1 | awk '{print $13}' > aux1.txt
+
+python /home/user1/GTSRB/plot_learning_curve.py /home/user1/GTSRB/caffe_models/caffenet_model_train.log /home/user1/GTSRB/caffe_models/caffenet_model_learning_curve.png
+
+
