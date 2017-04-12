@@ -16,4 +16,5 @@ grep ', loss = ' $1 | awk '{print $13}' > aux1.txt
 
 python /home/user1/GTSRB/plot_learning_curve.py /home/user1/GTSRB/caffe_models/caffenet_model_train.log /home/user1/GTSRB/caffe_models/caffenet_model_learning_curve.png
 
+python make_prediciotns.py 
 
