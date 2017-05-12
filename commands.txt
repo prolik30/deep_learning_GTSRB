@@ -1,3 +1,8 @@
+source activate caffeenv2
+
+cd ~/caffe-master/python/
+export PYTHONPATH=`pwd`${PYTHONPATH:+:${PYTHONPATH}}
+
 cd ~/GTSRB
 
 python create_lmdb.py 
@@ -8,13 +13,19 @@ python /home/user1/caffe-master/python/draw_net.py /home/user1/GTSRB/caffe_model
 
 /home/user1/caffe-master/build/tools/caffe train --solver /home/user1/GTSRB/caffe_models/caffenet_solver.prototxt 2>&1 | tee /home/user1/GTSRB/caffe_models/caffenet_model_train.log
 
+With weights(transfer training):
+/home/user1/caffe-master/build/tools/caffe train --solver=/home/user1/GTSRB/caffe_models/caffenet_model_2/solver.prototxt --weights /home/user1/caffe-master/models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel 2>&1 | tee /home/user1/GTSRB/caffe_models/caffenet_model_2/model_2_train.log
+
 A small change to caffe parse_log.sh file to resolve issue with plotting learning curves.
 On line 42 change :
 grep ', loss = ' $1 | awk '{print $9}' > aux1.txt
 to
 grep ', loss = ' $1 | awk '{print $13}' > aux1.txt
 
-python /home/user1/GTSRB/plot_learning_curve.py /home/user1/GTSRB/caffe_models/caffenet_model_train.log /home/user1/GTSRB/caffe_models/caffenet_model_learning_curve.png
+python /home/user1/GTSRB/plot_learning_curve.py /home/user1/GTSRB/caffe_models/caffenet_model_1_224_wmx_prelu/caffenet_model_train.log /home/user1/GTSRB/caffe_models/caffenet_model_1_224_wmx_prelu/caffenet_model_learning_curve.png
 
-python make_prediciotns.py 
+
+python make_predictions.py 
+
+
 
